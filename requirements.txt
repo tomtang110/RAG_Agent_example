@@ -1,0 +1,155 @@
+aiohappyeyeballs                            2.6.1            pypi_0           pypi
+aiohttp                                     3.12.15          pypi_0           pypi
+aiosignal                                   1.4.0            pypi_0           pypi
+annotated-types                             0.7.0            pypi_0           pypi
+anyio                                       4.10.0           pypi_0           pypi
+async-timeout                               4.0.3            pypi_0           pypi
+attrs                                       25.3.0           pypi_0           pypi
+backoff                                     2.2.1            pypi_0           pypi
+bcrypt                                      4.3.0            pypi_0           pypi
+build                                       1.3.0            pypi_0           pypi
+bzip2                                       1.0.8            h2bbff1b_6
+ca-certificates                             2025.2.25        haa95532_0
+cachetools                                  5.5.2            pypi_0           pypi
+certifi                                     2025.8.3         pypi_0           pypi
+cffi                                        1.17.1           pypi_0           pypi
+charset-normalizer                          3.4.3            pypi_0           pypi
+chromadb                                    1.0.20           pypi_0           pypi
+click                                       8.2.1            pypi_0           pypi
+colorama                                    0.4.6            pypi_0           pypi
+coloredlogs                                 15.0.1           pypi_0           pypi
+contourpy                                   1.3.2            pypi_0           pypi
+cryptography                                45.0.6           pypi_0           pypi
+cycler                                      0.12.1           pypi_0           pypi
+dashscope                                   1.24.2           pypi_0           pypi
+dataclasses-json                            0.6.7            pypi_0           pypi
+distro                                      1.9.0            pypi_0           pypi
+dotenv                                      0.9.9            pypi_0           pypi
+durationpy                                  0.10             pypi_0           pypi
+et-xmlfile                                  2.0.0            pypi_0           pypi
+exceptiongroup                              1.3.0            pypi_0           pypi
+expat                                       2.7.1            h8ddb27b_0
+faiss-cpu                                   1.12.0           pypi_0           pypi
+filelock                                    3.19.1           pypi_0           pypi
+flatbuffers                                 25.2.10          pypi_0           pypi
+fonttools                                   4.59.0           pypi_0           pypi
+frozenlist                                  1.7.0            pypi_0           pypi
+fsspec                                      2025.7.0         pypi_0           pypi
+google-auth                                 2.40.3           pypi_0           pypi
+googleapis-common-protos                    1.70.0           pypi_0           pypi
+greenlet                                    3.2.4            pypi_0           pypi
+grpcio                                      1.74.0           pypi_0           pypi
+h11                                         0.16.0           pypi_0           pypi
+httpcore                                    1.0.9            pypi_0           pypi
+httptools                                   0.6.4            pypi_0           pypi
+httpx                                       0.28.1           pypi_0           pypi
+httpx-sse                                   0.4.1            pypi_0           pypi
+huggingface-hub                             0.34.4           pypi_0           pypi
+humanfriendly                               10.0             pypi_0           pypi
+idna                                        3.10             pypi_0           pypi
+importlib-metadata                          8.7.0            pypi_0           pypi
+importlib-resources                         6.5.2            pypi_0           pypi
+jiter                                       0.10.0           pypi_0           pypi
+jsonpatch                                   1.33             pypi_0           pypi
+jsonpointer                                 3.0.0            pypi_0           pypi
+jsonschema                                  4.25.1           pypi_0           pypi
+jsonschema-specifications                   2025.4.1         pypi_0           pypi
+kiwisolver                                  1.4.8            pypi_0           pypi
+kubernetes                                  33.1.0           pypi_0           pypi
+langchain                                   0.3.27           pypi_0           pypi
+langchain-community                         0.3.27           pypi_0           pypi
+langchain-core                              0.3.74           pypi_0           pypi
+langchain-text-splitters                    0.3.9            pypi_0           pypi
+langgraph                                   0.6.6            pypi_0           pypi
+langgraph-checkpoint                        2.1.1            pypi_0           pypi
+langgraph-prebuilt                          0.6.4            pypi_0           pypi
+langgraph-sdk                               0.2.2            pypi_0           pypi
+langsmith                                   0.4.14           pypi_0           pypi
+libffi                                      3.4.4            hd77b12b_1
+markdown-it-py                              4.0.0            pypi_0           pypi
+marshmallow                                 3.26.1           pypi_0           pypi
+matplotlib                                  3.10.5           pypi_0           pypi
+mdurl                                       0.1.2            pypi_0           pypi
+mmh3                                        5.2.0            pypi_0           pypi
+mpmath                                      1.3.0            pypi_0           pypi
+multidict                                   6.6.4            pypi_0           pypi
+mypy-extensions                             1.1.0            pypi_0           pypi
+numpy                                       2.2.6            pypi_0           pypi
+oauthlib                                    3.3.1            pypi_0           pypi
+onnxruntime                                 1.22.1           pypi_0           pypi
+openai                                      1.100.1          pypi_0           pypi
+openpyxl                                    3.1.5            pypi_0           pypi
+openssl                                     3.0.17           h35632f6_0
+opentelemetry-api                           1.36.0           pypi_0           pypi
+opentelemetry-exporter-otlp-proto-common    1.36.0           pypi_0           pypi
+opentelemetry-exporter-otlp-proto-grpc      1.36.0           pypi_0           pypi
+opentelemetry-proto                         1.36.0           pypi_0           pypi
+opentelemetry-sdk                           1.36.0           pypi_0           pypi
+opentelemetry-semantic-conventions          0.57b0           pypi_0           pypi
+orjson                                      3.11.2           pypi_0           pypi
+ormsgpack                                   1.10.0           pypi_0           pypi
+overrides                                   7.7.0            pypi_0           pypi
+packaging                                   25.0             pypi_0           pypi
+pandas                                      2.3.1            pypi_0           pypi
+pillow                                      11.3.0           pypi_0           pypi
+pip                                         25.1             pyhc872135_2
+posthog                                     5.4.0            pypi_0           pypi
+propcache                                   0.3.2            pypi_0           pypi
+protobuf                                    6.32.0           pypi_0           pypi
+pyasn1                                      0.6.1            pypi_0           pypi
+pyasn1-modules                              0.4.2            pypi_0           pypi
+pybase64                                    1.4.2            pypi_0           pypi
+pycparser                                   2.22             pypi_0           pypi
+pydantic                                    2.11.7           pypi_0           pypi
+pydantic-core                               2.33.2           pypi_0           pypi
+pydantic-settings                           2.10.1           pypi_0           pypi
+pygments                                    2.19.2           pypi_0           pypi
+pyparsing                                   3.2.3            pypi_0           pypi
+pypika                                      0.48.9           pypi_0           pypi
+pyproject-hooks                             1.2.0            pypi_0           pypi
+pyreadline3                                 3.5.4            pypi_0           pypi
+python                                      3.10.18          h981015d_0
+python-dateutil                             2.9.0.post0      pypi_0           pypi
+python-dotenv                               1.1.1            pypi_0           pypi
+pytz                                        2025.2           pypi_0           pypi
+pyyaml                                      6.0.2            pypi_0           pypi
+referencing                                 0.36.2           pypi_0           pypi
+requests                                    2.32.5           pypi_0           pypi
+requests-oauthlib                           2.0.0            pypi_0           pypi
+requests-toolbelt                           1.0.0            pypi_0           pypi
+rich                                        14.1.0           pypi_0           pypi
+rpds-py                                     0.27.0           pypi_0           pypi
+rsa                                         4.9.1            pypi_0           pypi
+setuptools                                  78.1.1           py310haa95532_0
+shellingham                                 1.5.4            pypi_0           pypi
+six                                         1.17.0           pypi_0           pypi
+sniffio                                     1.3.1            pypi_0           pypi
+sqlalchemy                                  2.0.43           pypi_0           pypi
+sqlite                                      3.50.2           hda9a48d_1
+sympy                                       1.14.0           pypi_0           pypi
+tenacity                                    9.1.2            pypi_0           pypi
+tk                                          8.6.14           h5e9d12e_1
+tokenizers                                  0.21.4           pypi_0           pypi
+tomli                                       2.2.1            pypi_0           pypi
+tqdm                                        4.67.1           pypi_0           pypi
+typer                                       0.16.1           pypi_0           pypi
+typing-extensions                           4.14.1           pypi_0           pypi
+typing-inspect                              0.9.0            pypi_0           pypi
+typing-inspection                           0.4.1            pypi_0           pypi
+tzdata                                      2025.2           pypi_0           pypi
+ucrt                                        10.0.22621.0     haa95532_0
+urllib3                                     2.5.0            pypi_0           pypi
+uvicorn                                     0.35.0           pypi_0           pypi
+vc                                          14.3             h2df5915_10
+vc14_runtime                                14.44.35208      h4927774_10
+vs2015_runtime                              14.44.35208      ha6b5a95_10
+watchfiles                                  1.1.0            pypi_0           pypi
+websocket-client                            1.8.0            pypi_0           pypi
+websockets                                  15.0.1           pypi_0           pypi
+wheel                                       0.45.1           py310haa95532_0
+xxhash                                      3.5.0            pypi_0           pypi
+xz                                          5.6.4            h4754444_1
+yarl                                        1.20.1           pypi_0           pypi
+zipp                                        3.23.0           pypi_0           pypi
+zlib                                        1.2.13           h8cc25b3_1
+zstandard                                   0.24.0           pypi_0           pypi
