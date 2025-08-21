@@ -5,6 +5,10 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.vectorstores.utils import DistanceStrategy
 import re
 import json
+from rank_bm25 import BM25Okapi
+import spacy
+
+
 def df2content(df):
     res = []
     for i, row in df.iterrows():
@@ -15,42 +19,43 @@ def df2content(df):
         position = row['position']
         honor = row['honor']
 
-        conent_prompt = f"""- name 
-{name}
+        conent_prompt = f"""- name: {name}
+- gender:{gender}
 
-- gender
-{gender}
+- height: {height}
 
-- height
-{height}
+- weight: {weight}
 
-- weight
-{weight}
+- position: {position}
 
-- position
-{position}
-
-- honor
-{honor}
+- honor: {honor}
 """
         res.append(conent_prompt)
 
     return res
 
-def create_vectorstore_from_excel(file_path):
+
+def token_text_for_bm25(text):
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(text)
+
+    tokens = [token.text.lower() for token in doc if token.is_alpha]
+    return tokens
+
+def create_indexstore_from_excel(file_path):
     df = pd.read_excel(file_path)
+    print(f"{file_path} has been read completely.")
     contents = df2content(df)
     docs = [Document(page_content=content) for content in contents]
+    vector_topk = 5
+    bm25_topk = 5
 
     embeddings = QwenEmbeddings()
 
-    # vectorstore = FAISS.from_documents(documents=docs,
-    #                                    embedding=embeddings,
-    #                                    distance_strategy=DistanceStrategy.COSINE
-    #                                    )
 
     batch_size = 10
     vectorstore = None
+
 
     for i in range(0, len(docs), batch_size):
         batch_docs = docs[i:i + batch_size]
@@ -71,7 +76,27 @@ def create_vectorstore_from_excel(file_path):
             )
             vectorstore.merge_from(temp_store)
 
-    return vectorstore.as_retriever(search_kwargs={"k": 2})
+    vector_retriever = vectorstore.as_retriever(search_kwargs={"k": vector_topk})
+    print("vector retriever has established.")
+    # BM25
+    tokenized_corpus = [token_text_for_bm25(doc.page_content) for doc in docs]
+    bm25_model = BM25Okapi(tokenized_corpus)
+    def bm25_retrieve(query):
+        query_tokens = token_text_for_bm25(query)
+        scores = bm25_model.get_scores(query_tokens)
+        top_indices = sorted(range(len(scores)),key=lambda i:scores[i],reverse=True)[:bm25_topk]
+        results = []
+        for idx in top_indices:
+            if scores[idx] > 0:
+                results.append(
+                    {"page_content": docs[idx].page_content,
+                        "metadata": docs[idx].metadata,
+                        "score": float(scores[idx])}
+                )
+        return  results
+
+    print("bm25 retriever has established.")
+    return vector_retriever,bm25_retrieve
 
 
 def parse_response(response):

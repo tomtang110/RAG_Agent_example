@@ -28,6 +28,7 @@ The Agent RAG pipeline includes the following core modules:
 |--------------|-----------|
 | **Router**   | Determines if the query is basketball-related. If not, it returns a rejection response. |
 | **Retriever** | Combines **dense retrieval (embedding-based)** and **sparse retrieval (BM25)** for robust document lookup. |
+| **Reranker**  | a reranker to eliminate the pressure of generator |
 | **Generator** | Uses a large language model to generate natural language responses based on retrieved context. |
 
 > 🔧 **Future Enhancements**: Support for query rewriting, reranking, and web search will be added in upcoming versions.
@@ -38,7 +39,7 @@ The Agent RAG pipeline includes the following core modules:
 
 This project relies on the following key libraries and services:
 
-- `qwen` – Alibaba's Qwen API for LLM inference (used for generation and embeddings)
+- `qwen` – Alibaba's Qwen API for LLM inference (used for generation, reranker and embeddings)
 - `langchain` – Framework for building LLM-powered applications
 - `langgraph` – For orchestrating agent workflows and state management
 - `pydantic` – Data validation and settings management
@@ -60,7 +61,7 @@ pip install -r requirements.txt
 ```
 .
 ├── main.py                   # Entry point: Implements the full RAG pipeline
-├── models.py                 # Defines the embedding and generation APIs using Qwen
+├── models.py                 # Defines the embedding, reranker and generation APIs using Qwen
 ├── prompt_set.py             # Contains prompts for router and generator
 ├── utils.py                  # Utility functions for parsing and data processing
 ├── america_basketball_player.xlsx  # Dataset: Top 50 American players
@@ -110,7 +111,7 @@ Based on the dataset, the top 3 Chinese basketball players by career points are:
 ## 📌 Limitations
 
 - Domain-specific: Only answers questions related to the provided basketball datasets.
-- No query expansion or advanced reranking yet.
+- No query expansion.
 - Performance depends on the quality of the input data and embedding model.
 
 ---
@@ -118,7 +119,6 @@ Based on the dataset, the top 3 Chinese basketball players by career points are:
 ## 🌟 Future Work
 
 - [ ] Add **query revision** module to improve retrieval accuracy
-- [ ] Integrate a **reranker** (e.g., BERT-based) to improve result relevance
 - [ ] Enable **web search fallback** for out-of-dataset queries
 - [ ] Support for more sports and broader domains
 

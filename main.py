@@ -3,20 +3,14 @@ import json
 from typing import List, Any, Literal,Dict
 from pydantic import BaseModel
 
-from openai import OpenAI
-from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import DataFrameLoader
-from langchain_community.vectorstores.utils import DistanceStrategy
-import pandas as pd
 from langgraph.graph import StateGraph, END,START
 import dashscope
 from dashscope import Generation  # 用于 Qwen 生成
-from utils import create_vectorstore_from_excel,parse_response
+from utils import create_indexstore_from_excel,parse_response
 from prompt_set import router_prompt,generation_prompt
 from concurrent.futures import ThreadPoolExecutor
-import asyncio
 from dotenv import load_dotenv
-
+from models import rerank_with_dashscope
 
 
 load_dotenv(dotenv_path=r"../.env", override=True)
@@ -26,12 +20,7 @@ api_k = os.getenv("DASHSCOPE_API_KEY")
 
 dashscope.api_key = api_k
 
-class AgentState(BaseModel):
-    question: str
-    router:List[str]=[]
-    contexts: Dict[str,str]={}
-    final_answer: str=""
-    retrieved_context: str=""
+
 
 
 db_configs = {
@@ -43,9 +32,19 @@ retriever_dict = {}
 
 for db_name,file_path in db_configs.items():
 
-    retriever = create_vectorstore_from_excel(file_path)
-    if retriever:
-        retriever_dict[db_name] = retriever
+    retriever_vec,retriever_bm25 = create_indexstore_from_excel(file_path)
+
+
+    retriever_dict[f"{db_name}_vector"] = retriever_vec
+    retriever_dict[f"{db_name}_bm25"] = retriever_bm25
+
+
+class AgentState(BaseModel):
+    question: str
+    router:List[str]=[]
+    contexts: Dict[str,List[str]]={}
+    final_answer: str=""
+    retrieved_context: str=""
 
 
 def route_database(state):
@@ -69,9 +68,30 @@ executor = ThreadPoolExecutor(max_workers=4)
 
 def _retrieve_one(db_name,question):
     try:
-        docs = retriever_dict[db_name].invoke(question)
-        content = "\n\n".join([d.page_content for d in docs])
-        return db_name,content
+        potential_res = []
+        content = ""
+        # embedding
+        vec_name = f"{db_name}_vector"
+        docs = retriever_dict[vec_name].invoke(question)
+        print(f"vector retrieve {len(docs)} doc.")
+        for i,d in enumerate(docs):
+            potential_res.append(d.page_content + f"\n- source: {db_name}")
+
+
+        # bm25
+        bm_name = f"{db_name}_bm25"
+        docs = retriever_dict[bm_name](question)
+        print(f"bm25 retrieve {len(docs)} doc.")
+        for i_dict in docs:
+            # print(i_dict['metadata'])
+            potential_res.append(i_dict["page_content"]  + f"\n- source: {db_name}")
+
+        duplicated_res = list(set(potential_res))
+
+        print(f"{len(duplicated_res)} docs have been retrieved.")
+
+
+        return db_name,duplicated_res
     except Exception as e:
         return db_name, f"[retrieval fail: {str(e)}]"
 
@@ -83,19 +103,30 @@ def retrieve_parallel(state):
     ]
     results = [future.result() for future in futures]  # 等待全部完成
 
+
     state.contexts = {db: content for db, content in results}
     return state
 
-def aggregate_context(state):
+def rerank_context(state):
     parts = []
     for db_name,content in state.contexts.items():
-        if content.strip() and not content.startswith("[retrieval fail"):
-            parts.append(f"[source from {db_name}]\n{content}")
 
-    contexts = []
-    for i, part in enumerate(parts):
-        contexts.append(f"{i}. {part}")
-    state.retrieved_context = "\n\n".join(contexts) if contexts else "retrieve nothing"
+            parts.extend(content)
+
+    query = state.question
+    outputs = rerank_with_dashscope(query,parts)
+    # print(outputs)
+    rerank_parse = outputs["output"]["results"]
+    rerank_result = []
+    for i_dict in rerank_parse:
+        rerank_result.append(i_dict["document"]["text"])
+
+    contents = ""
+
+    for i,doc in enumerate(rerank_result):
+        contents += f"## Content {i}\n{doc}\n"
+
+    state.retrieved_context = contents
     return state
 
 def generate_answer(state):
@@ -118,14 +149,14 @@ workflow = StateGraph(AgentState)
 
 workflow.add_node("route_databases",route_database)
 workflow.add_node("retrieve_parallel",retrieve_parallel)
-workflow.add_node("aggregate_context",aggregate_context)
+workflow.add_node("rerank_context",rerank_context)
 workflow.add_node("generate_answer",generate_answer)
 
 
 workflow.add_edge(START, "route_databases")
 workflow.add_edge("route_databases","retrieve_parallel")
-workflow.add_edge("retrieve_parallel","aggregate_context")
-workflow.add_edge("aggregate_context","generate_answer")
+workflow.add_edge("retrieve_parallel","rerank_context")
+workflow.add_edge("rerank_context","generate_answer")
 workflow.add_edge("generate_answer",END)
 
 app = workflow.compile()

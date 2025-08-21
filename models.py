@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import json
 from langchain_core.embeddings import Embeddings
 from typing import List, Any, Literal
-
-
+from http import HTTPStatus
+import dashscope
 
 def generation_models(prompt):
     load_dotenv(dotenv_path=r"/code_project/.env", override=True)
@@ -84,8 +84,29 @@ class QwenEmbeddings(Embeddings):
 
     def embed_query(self, text: str) -> list[float]:
         return self.embed_documents([text])[0]
+
+
+def rerank_with_dashscope(query: str, passages: list):
+    load_dotenv(dotenv_path=r"../.env", override=True)
+
+    api_k = os.getenv("DASHSCOPE_API_KEY")
+
+    dashscope.api_key = api_k
+    resp = dashscope.TextReRank.call(
+        model="gte-rerank-v2",
+        query=query,
+        documents=passages,
+        top_n=5,
+        return_documents=True
+    )
+    if resp.status_code == HTTPStatus.OK:
+        return resp
+    else:
+        print(resp)
+
 if __name__ == "__main__":
     input_str = "what is your name"
     # print(embedding_models(input_str))
 
-    print(generation_models(input_str))
+    # print(generation_models(input_str))
+    print(rerank_with_dashscope(input_str,["life is astruggle"]))
