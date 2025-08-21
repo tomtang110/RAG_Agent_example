@@ -1,4 +1,4 @@
- **语言**: **中文** | [English](README.md)
+ **语言**: **中文** | [English](readme.md)
 # 简单的 Agent RAG：篮球运动员信息问答系统
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)

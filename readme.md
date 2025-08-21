@@ -1,4 +1,4 @@
-🌐 **Languages**: [中文](README_zh.md) | **English**
+🌐 **Languages**: [中文](readme_zh.md) | **English**
 # Simple Agent RAG for Basketball Player Information
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
