@@ -2,14 +2,15 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import json
+from langchain_core.embeddings import Embeddings
+from typing import List, Any, Literal
 
 
-load_dotenv(dotenv_path=r"/code_project/.env", override=True)
-
-
-api_k = os.getenv("DASHSCOPE_API_KEY")
 
 def generation_models(prompt):
+    load_dotenv(dotenv_path=r"/code_project/.env", override=True)
+
+    api_k = os.getenv("DASHSCOPE_API_KEY")
     client = OpenAI(
         # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
         api_key=api_k,  # 如何获取API Key：https://help.aliyun.com/zh/model-studio/developer-reference/get-api-key
@@ -30,6 +31,9 @@ def generation_models(prompt):
     return output
 
 def embedding_models(doc):
+    load_dotenv(dotenv_path=r"/code_project/.env", override=True)
+
+    api_k = os.getenv("DASHSCOPE_API_KEY")
     client = OpenAI(
         api_key=api_k,  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
@@ -48,6 +52,38 @@ def embedding_models(doc):
 
     return embeddings
 
+
+class QwenEmbeddings(Embeddings):
+    client = None
+    model_name = "text-embedding-v4"
+    dimensions = 512
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+
+        load_dotenv(dotenv_path=r"../.env", override=True)
+
+        api_k = os.getenv("DASHSCOPE_API_KEY")
+        # print(api_k)
+        self.client = OpenAI(
+        api_key=api_k,  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
+        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
+    )
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        if not texts:
+            return []
+        response = self.client.embeddings.create(
+            model=self.model_name,
+            input=texts,
+            dimensions=self.dimensions,
+            encoding_format="float"
+        )
+        result = json.loads(response.model_dump_json())
+        return [d['embedding'] for d in result['data']]
+
+    def embed_query(self, text: str) -> list[float]:
+        return self.embed_documents([text])[0]
 if __name__ == "__main__":
     input_str = "what is your name"
     # print(embedding_models(input_str))
