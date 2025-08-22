@@ -5,7 +5,7 @@
 
 This repository provides a simple **Agent RAG (Retrieval-Augmented Generation)** system designed to help practitioners understand the foundational components of building a domain-specific question-answering system. The current implementation focuses exclusively on **basketball-related queries**, specifically information about the **top 50 Chinese and American basketball players**.
 
-This project is ideal for learning how to integrate core RAG components such as routing, retrieval (embedding + BM25), reranker, query-supplement,webSearch,Information filter,condition judge,ReAct,and generation using modern LLM tooling.
+This project is ideal for learning how to integrate core RAG components such as **routing**, **retrieval (embedding + BM25)**, **reranker**, **query-supplement**,**webSearch**,**Information filter**,**condition judge**,**ReAct**,and **generation using modern LLM tooling**.
 
 ---
 
