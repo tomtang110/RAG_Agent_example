@@ -42,6 +42,36 @@ def token_text_for_bm25(text):
     tokens = [token.text.lower() for token in doc if token.is_alpha]
     return tokens
 
+
+def parse_response(response):
+    pattern = r'```json\n(.*?)\n```'
+    pattern2 = r'```json\n(.*?)\n'
+    # 使用非贪婪匹配查找第一个符合条件的内容
+    match = re.search(pattern, response, re.DOTALL)
+
+    match2 = re.search(pattern2, response, re.DOTALL)
+
+    if match:
+        # 重组完整的JSON数组字符串
+        json_str = match.group(1)
+        try:
+            # 解析为JSON对象并返回
+            return json.loads(json_str)
+        except json.JSONDecodeError:
+            print("提取到的内容不是有效的JSON格式")
+            return None
+    elif match2:
+        json_str = match2.group(1)
+        try:
+            # 解析为JSON对象并返回
+            return json.loads(json_str)
+        except json.JSONDecodeError:
+            print("pattern2: 提取到的内容不是有效的JSON格式")
+            return None
+    else:
+        print("未找到符合格式的JSON内容")
+        return None
+
 def create_indexstore_from_excel(file_path):
     df = pd.read_excel(file_path)
     print(f"{file_path} has been read completely.")
@@ -99,22 +129,4 @@ def create_indexstore_from_excel(file_path):
     return vector_retriever,bm25_retrieve
 
 
-def parse_response(response):
-    pattern = r'```json\n(.*?)\n```'
 
-    # 使用非贪婪匹配查找第一个符合条件的内容
-    match = re.search(pattern, response, re.DOTALL)
-
-
-    if match:
-        # 重组完整的JSON数组字符串
-        json_str = match.group(1)
-        try:
-            # 解析为JSON对象并返回
-            return json.loads(json_str)
-        except json.JSONDecodeError:
-            print("提取到的内容不是有效的JSON格式")
-            return None
-    else:
-        print("未找到符合格式的JSON内容")
-        return None

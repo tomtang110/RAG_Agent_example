@@ -6,6 +6,7 @@ from langchain_core.embeddings import Embeddings
 from typing import List, Any, Literal
 from http import HTTPStatus
 import dashscope
+from tavily import TavilyClient
 
 def generation_models(prompt):
     load_dotenv(dotenv_path=r"/code_project/.env", override=True)
@@ -104,9 +105,27 @@ def rerank_with_dashscope(query: str, passages: list):
     else:
         print(resp)
 
+
+def web_search(query):
+    load_dotenv(dotenv_path=r"../.env", override=True)
+    tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
+    try:
+        result = tavily_client.search(query, max_results=5)
+        if result["results"]:
+            return result
+        else:
+            return "[No web result found]"
+
+
+    except Exception as e:
+        return f"[Web search failed: {str(e)}]"
+
+
 if __name__ == "__main__":
     input_str = "what is your name"
     # print(embedding_models(input_str))
 
     # print(generation_models(input_str))
-    print(rerank_with_dashscope(input_str,["life is astruggle"]))
+    # print(rerank_with_dashscope(input_str,["life is astruggle"]))
+
+    print(web_search("who is the best basketball player in USA"))
